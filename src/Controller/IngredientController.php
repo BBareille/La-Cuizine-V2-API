@@ -45,7 +45,7 @@ class IngredientController extends AbstractController
 
         return new JsonResponse($jsonIngredientToDelete, Response::HTTP_OK, [], true);
     }
-    #[Route('/api/updateIngredient/{id}/{newName}', name: 'newIngredient', methods: ['PUT'])]
+    #[Route('/api/updateIngredient/{id}/{newName}', name: 'modifyIngredient', methods: ['PUT'])]
     public function updateIngredient(int $id,string $newName, IngredientsRepository $ingredientsRepository, SerializerInterface $serializer){
         $ingredientToUpdate = $ingredientsRepository->findOneBy(["id"=>$id]);
         $ingredientToUpdate->setName($newName);
