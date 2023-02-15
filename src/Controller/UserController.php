@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class UserController extends AbstractController
 {
         #[Route('/api/newUser', name: 'newUser', methods: ['POST'])]
@@ -36,29 +37,21 @@ class UserController extends AbstractController
                 
         }
         
-        #[Route('/api/userTest', name: 'login', methods: ['GET'])]
-        public function connect(Request $request, UserRepository
-        $userRepository, SerializerInterface $serializer, Security $security, UserPasswordHasherInterface $passwordHasher):
-        JsonResponse{
-                $data = json_decode($request->getContent(), true);
-                
-                $user = $userRepository->findOneBy(array("username" => $data['username']));
-                $hashedPassword = $passwordHasher->hashPassword(
-                            $user,
-                            $data['password']
-                );
-                
-                var_dump($hashedPassword);
-                var_dump($user->getPassword());
-                if($hashedPassword == $user->getPassword()){
-                        var_dump('ok');
-                }
-                else{
-                        var_dump("wrong credentials");
-                }
-                
-//                $securityTest = $security->login($user);
-                $jsonData = $serializer->serialize($user->getUsername(), 'json');
-                return new JsonResponse($jsonData, Response::HTTP_OK, [], true);
-        }
+        #[Route('/api/login', name: 'api_login')]
+        public function index(#[CurrentUser] ?User $user): Response
+        {
+         if (null === $user) {
+                           return $this->json([
+                                             'message' => 'missing credentials',
+                                        ], Response::HTTP_UNAUTHORIZED);
+         }
+
+        $token = "";// somehow create an API token for $user
+          return $this->json([
+                      'message' => 'Welcome to your new controller!',
+                      'path' => 'src/Controller/ApiLoginController.php',
+                      'user'  => $user->getUserIdentifier(),
+                      'token' => $token,
+          ]);
+      }
 }
