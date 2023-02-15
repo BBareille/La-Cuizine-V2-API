@@ -4,14 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Ingredients;
 use App\Repository\IngredientsRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\BrowserKit\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class IngredientController extends AbstractController
 {
@@ -24,11 +22,13 @@ class IngredientController extends AbstractController
         return new JsonResponse($jsonIngredientList, Response::HTTP_OK, [], true);
     }
 
-    #[Route('/api/newIngredient/{name}', name: 'newIngredient', methods: ['POST'])]
-    public function newIngredient(string $name,IngredientsRepository $ingredientsRepository, SerializerInterface $serizalizer): JsonResponse
+    #[Route('/api/newIngredient/{data}', name: 'newIngredient', methods: ['POST'])]
+    public function newIngredient($data,Request $request,
+                                  IngredientsRepository
+    $ingredientsRepository, SerializerInterface $serizalizer): JsonResponse
     {
         $newIngredient = new Ingredients();
-        $newIngredient->setName($name);
+        $newIngredient->setName($data);
         $ingredientsRepository->save($newIngredient, true);
         $jsonNewIngredient = $serizalizer->serialize($newIngredient, 'json');
 
