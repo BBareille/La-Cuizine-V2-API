@@ -7,12 +7,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use App\Security\ApiKeyAuthenticator;
 class UserController extends AbstractController
 {
         #[Route('/api/newUser', name: 'newUser', methods: ['POST'])]
@@ -37,21 +41,4 @@ class UserController extends AbstractController
                 
         }
         
-        #[Route('/api/login', name: 'api_login')]
-        public function index(#[CurrentUser] ?User $user): Response
-        {
-         if (null === $user) {
-                           return $this->json([
-                                             'message' => 'missing credentials',
-                                        ], Response::HTTP_UNAUTHORIZED);
-         }
-
-        $token = "";// somehow create an API token for $user
-          return $this->json([
-                      'message' => 'Welcome to your new controller!',
-                      'path' => 'src/Controller/ApiLoginController.php',
-                      'user'  => $user->getUserIdentifier(),
-                      'token' => $token,
-          ]);
-      }
 }
