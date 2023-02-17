@@ -14,9 +14,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use App\Security\ApiKeyAuthenticator;
 class UserController extends AbstractController
 {
         #[Route('/api/newUser', name: 'newUser', methods: ['POST'])]

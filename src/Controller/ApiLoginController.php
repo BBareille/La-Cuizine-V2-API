@@ -16,11 +16,12 @@ class ApiLoginController extends AbstractController
         if (null === $user){
                 return $this->json([
                             'message' => 'missing Credentials',
-                ], Response::HTTP_UNAUTHORIZED);
+                ]);
         }
         
         return $this->json([
                     'user' => $user->getUserIdentifier(),
+                'message' => 'Connexion réussie'
         ]);
     }
 }
