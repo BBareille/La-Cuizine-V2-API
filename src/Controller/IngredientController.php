@@ -37,7 +37,8 @@ class IngredientController extends AbstractController
 
     #[Route('/api/deleteIngredient/{id}', name: 'deleteIngredient', methods: ['DELETE'])]
     public function deleteIngredient(int $id, IngredientsRepository $ingredientsRepository, SerializerInterface $serizalizer){
-
+        
+            $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
         $ingredientToDelete = $ingredientsRepository->findOneBy(["id"=>$id]);
         $ingredientsRepository->remove($ingredientToDelete, true);
         $jsonIngredientToDelete = $serizalizer->serialize($ingredientToDelete, 'json');
@@ -47,7 +48,10 @@ class IngredientController extends AbstractController
     }
     #[Route('/api/updateIngredient/{id}/{newName}', name: 'modifyIngredient', methods: ['PUT'])]
     public function updateIngredient(int $id,string $newName, IngredientsRepository $ingredientsRepository, SerializerInterface $serializer){
-        $ingredientToUpdate = $ingredientsRepository->findOneBy(["id"=>$id]);
+        
+            $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
+            
+            $ingredientToUpdate = $ingredientsRepository->findOneBy(["id"=>$id]);
         $ingredientToUpdate->setName($newName);
         $ingredientsRepository->save($ingredientToUpdate, true);
         $jsonIngredientToUpdate = $serializer->serialize($ingredientToUpdate, 'json');

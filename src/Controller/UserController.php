@@ -7,9 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
-use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
@@ -28,8 +25,8 @@ class UserController extends AbstractController
                             $data['password']
                 );
                 $newUser->setUsername($data['username'])
-                        ->setPassword($hashedPassword);
-                
+                        ->setPassword($hashedPassword)
+                        ->setRoles(["ROLE_USER"]);
                 
                 $userRepository->save($newUser, true);
                 $jsonData = $serializer->serialize($data, 'json');
@@ -37,5 +34,6 @@ class UserController extends AbstractController
                 return new JsonResponse($jsonData, Response::HTTP_OK, [], true);
                 
         }
+        
         
 }
